@@ -14,7 +14,7 @@ except Exception as e:
     print(f"Error loading model: {e}")
     model = None
 
-# Advance UI with Animations, Center Alignment, and AJAX
+# Advance UI with Dropdowns, Typing Effect, and Confetti Celebration
 HTML_FORM = """
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +22,8 @@ HTML_FORM = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Laptop Prediction</title>
+    <!-- Confetti Library for Celebration Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         /* Base Styling & Background */
         body { 
@@ -35,7 +37,7 @@ HTML_FORM = """
             min-height: 100vh; 
         }
         
-        /* Container Styling with Animation */
+        /* Container Styling */
         .container { 
             background: rgba(255, 255, 255, 0.95); 
             padding: 30px 40px; 
@@ -51,11 +53,27 @@ HTML_FORM = """
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 { text-align: center; color: #333; margin-top: 0; }
+        /* Animated Typing Effect for Heading */
+        .typewriter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .typewriter h2 {
+            color: #333;
+            margin: 0;
+            overflow: hidden;
+            border-right: .15em solid #667eea;
+            white-space: nowrap;
+            letter-spacing: .05em;
+            animation: typing 2.5s steps(30, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #667eea; } }
 
-        /* Input Fields */
+        /* Input & Dropdown Fields */
         label { font-weight: bold; color: #555; font-size: 14px; display: block; margin-top: 15px;}
-        input { 
+        input, select { 
             width: 100%; 
             padding: 10px; 
             margin-top: 5px; 
@@ -63,10 +81,12 @@ HTML_FORM = """
             border-radius: 8px; 
             box-sizing: border-box;
             transition: border-color 0.3s;
+            font-size: 15px;
+            background-color: white;
         }
-        input:focus { border-color: #667eea; outline: none; }
+        input:focus, select:focus { border-color: #667eea; outline: none; }
 
-        /* Button Styling with Hover Animation */
+        /* Button Styling */
         button { 
             width: 100%; 
             padding: 12px; 
@@ -104,19 +124,37 @@ HTML_FORM = """
 </head>
 <body>
     <div class="container">
-        <h2>Predict Model</h2>
+        
+        <div class="typewriter">
+            <h2>AI Prediction</h2>
+        </div>
+
         <form id="predictionForm">
             <label>Age:</label>
             <input type="number" step="any" id="Age" value="25" required>
             
             <label>Gender:</label>
-            <input type="number" step="any" id="Gender" value="1" required>
+            <select id="Gender" required>
+                <option value="0">Female (0)</option>
+                <option value="1" selected>Male (1)</option>
+            </select>
             
             <label>Region:</label>
-            <input type="number" step="any" id="Region" value="1" required>
+            <select id="Region" required>
+                <option value="0">Region Type 0</option>
+                <option value="1" selected>Region Type 1</option>
+                <option value="2">Region Type 2</option>
+                <option value="3">Region Type 3</option>
+            </select>
             
             <label>Occupation:</label>
-            <input type="number" step="any" id="Occupation" value="2" required>
+            <select id="Occupation" required>
+                <option value="0">Student (0)</option>
+                <option value="1">Professional (1)</option>
+                <option value="2" selected>Business (2)</option>
+                <option value="3">Freelancer (3)</option>
+                <option value="4">Other (4)</option>
+            </select>
             
             <label>Income:</label>
             <input type="number" step="any" id="Income" value="50000" required>
@@ -124,21 +162,22 @@ HTML_FORM = """
             <button type="submit">Predict Now</button>
         </form>
 
-        <!-- Prediction result will show here -->
         <div id="result-box"></div>
     </div>
 
     <script>
-        // Form submit hone par page reload rokne ke liye JavaScript (AJAX)
         document.getElementById("predictionForm").addEventListener("submit", async function(event) {
-            event.preventDefault(); // Page refresh hone se rokta hai
+            event.preventDefault(); 
             
             const resultBox = document.getElementById("result-box");
+            const btn = document.querySelector("button");
+            
             resultBox.style.display = "block";
             resultBox.className = ""; 
             resultBox.innerText = "Predicting...";
+            btn.innerText = "Processing...";
+            btn.disabled = true;
 
-            // Values collect karna
             const data = {
                 Age: document.getElementById("Age").value,
                 Gender: document.getElementById("Gender").value,
@@ -148,7 +187,6 @@ HTML_FORM = """
             };
 
             try {
-                // API ko background me call karna
                 const response = await fetch("/predict", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -157,12 +195,20 @@ HTML_FORM = """
                 
                 const result = await response.json();
                 
-                // Result show karna directly page par
                 if(result.status === "success") {
                     resultBox.innerText = "Prediction: " + result.prediction_result.toUpperCase();
-                    // Different colors based on "yes" or "no"
+                    
                     if(result.prediction_result.toLowerCase() === "yes") {
                         resultBox.className = "success-yes";
+                        
+                        // Fire the Confetti Celebration Animation!
+                        confetti({
+                            particleCount: 150,
+                            spread: 80,
+                            origin: { y: 0.6 },
+                            colors: ['#26ccff', '#a25afd', '#ff5e7e', '#88ff5a', '#fcff42', '#ffa62d', '#ff36ff']
+                        });
+                        
                     } else {
                         resultBox.className = "success-no";
                     }
@@ -173,6 +219,9 @@ HTML_FORM = """
             } catch (error) {
                 resultBox.innerText = "Something went wrong!";
                 resultBox.className = "error";
+            } finally {
+                btn.innerText = "Predict Now";
+                btn.disabled = false;
             }
         });
     </script>
@@ -192,7 +241,6 @@ def predict():
         return jsonify({"error": "Model is not loaded."}), 500
 
     try:
-        # Ab data hamesha JSON format me aayega kyu ki front-end JS fetch use kar raha hai
         data = request.get_json()
 
         feature_names = ['Age', 'Gender', 'Region', 'Occupation', 'Income']
