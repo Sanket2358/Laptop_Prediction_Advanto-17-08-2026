@@ -14,7 +14,7 @@ except Exception as e:
     print(f"Error loading model: {e}")
     model = None
 
-# Advance UI with Dropdowns, Typing Effect, and Confetti Celebration
+# Advance UI with Dynamic Typing Effect, Dropdowns, and Confetti
 HTML_FORM = """
 <!DOCTYPE html>
 <html lang="en">
@@ -53,23 +53,25 @@ HTML_FORM = """
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Animated Typing Effect for Heading */
-        .typewriter {
-            display: flex;
-            justify-content: center;
+        /* Dynamic Typing Effect CSS */
+        .typewriter-container {
+            text-align: center;
             margin-bottom: 20px;
-        }
-        .typewriter h2 {
+            font-size: 26px;
+            font-weight: bold;
             color: #333;
-            margin: 0;
-            overflow: hidden;
-            border-right: .15em solid #667eea;
-            white-space: nowrap;
-            letter-spacing: .05em;
-            animation: typing 2.5s steps(30, end), blink-caret .75s step-end infinite;
+            min-height: 35px; /* Taki layout shift na ho */
         }
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #667eea; } }
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 25px;
+            background-color: #667eea;
+            vertical-align: middle;
+            margin-left: 3px;
+            animation: blink 0.75s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
 
         /* Input & Dropdown Fields */
         label { font-weight: bold; color: #555; font-size: 14px; display: block; margin-top: 15px;}
@@ -125,8 +127,9 @@ HTML_FORM = """
 <body>
     <div class="container">
         
-        <div class="typewriter">
-            <h2>AI Prediction</h2>
+        <!-- JavaScript se control hone wala Dynamic Heading -->
+        <div class="typewriter-container">
+            <span id="typewriter-text"></span><span class="cursor"></span>
         </div>
 
         <form id="predictionForm">
@@ -166,6 +169,43 @@ HTML_FORM = """
     </div>
 
     <script>
+        // 1. DYNAMIC TYPING EFFECT LOGIC
+        const words = ["AI Prediction", "Laptop Predictor", "Smart AI Engine", "Data Analytics"];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById("typewriter-text");
+
+        function typeEffect() {
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typingSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                typingSpeed = 2000; // Word complete hone ke baad rukne ka time
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length; // Next word select karo
+                typingSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typingSpeed);
+        }
+        
+        // Start typing effect jab page load ho
+        document.addEventListener("DOMContentLoaded", typeEffect);
+
+
+        // 2. FORM SUBMISSION & PREDICTION LOGIC
         document.getElementById("predictionForm").addEventListener("submit", async function(event) {
             event.preventDefault(); 
             
