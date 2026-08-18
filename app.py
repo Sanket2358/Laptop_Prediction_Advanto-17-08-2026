@@ -14,7 +14,7 @@ except Exception as e:
     print(f"Error loading model: {e}")
     model = None
 
-# Advance UI with Dynamic Typing Effect, Dropdowns, and Confetti
+# Premium UI with Header, Animated Background, and 2-Word Typing Effect
 HTML_FORM = """
 <!DOCTYPE html>
 <html lang="en">
@@ -25,27 +25,57 @@ HTML_FORM = """
     <!-- Confetti Library for Celebration Animation -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* Base Styling & Background */
+        /* Animated Gradient Background */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0; 
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
+            flex-direction: column;
         }
-        
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Top Header */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 0;
+            text-align: center;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
         /* Container Styling */
         .container { 
-            background: rgba(255, 255, 255, 0.95); 
-            padding: 30px 40px; 
-            border-radius: 15px; 
-            box-shadow: 0px 15px 25px rgba(0,0,0,0.2); 
+            background: #ffffff; 
+            padding: 35px 40px; 
+            border-radius: 16px; 
+            box-shadow: 0px 20px 40px rgba(0,0,0,0.2); 
             width: 100%;
-            max-width: 350px; 
+            max-width: 360px; 
             animation: fadeIn 1s ease-in-out;
+            margin-top: 80px; /* Header ke liye space */
         }
 
         @keyframes fadeIn {
@@ -56,56 +86,65 @@ HTML_FORM = """
         /* Dynamic Typing Effect CSS */
         .typewriter-container {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-size: 26px;
-            font-weight: bold;
-            color: #333;
-            min-height: 35px; /* Taki layout shift na ho */
+            font-weight: 800;
+            color: #2c3e50;
+            min-height: 35px;
         }
         .cursor {
             display: inline-block;
             width: 3px;
             height: 25px;
-            background-color: #667eea;
+            background-color: #e73c7e;
             vertical-align: middle;
-            margin-left: 3px;
+            margin-left: 4px;
             animation: blink 0.75s step-end infinite;
         }
         @keyframes blink { 50% { opacity: 0; } }
 
         /* Input & Dropdown Fields */
-        label { font-weight: bold; color: #555; font-size: 14px; display: block; margin-top: 15px;}
+        label { font-weight: 600; color: #34495e; font-size: 14px; display: block; margin-top: 15px;}
         input, select { 
             width: 100%; 
-            padding: 10px; 
-            margin-top: 5px; 
-            border: 1px solid #ccc; 
+            padding: 12px; 
+            margin-top: 6px; 
+            border: 2px solid #eaeded; 
             border-radius: 8px; 
             box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
             font-size: 15px;
-            background-color: white;
+            background-color: #fcfcfc;
+            color: #2c3e50;
         }
-        input:focus, select:focus { border-color: #667eea; outline: none; }
+        input:focus, select:focus { 
+            border-color: #3498db; 
+            background-color: #fff;
+            outline: none; 
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+        }
 
         /* Button Styling */
         button { 
             width: 100%; 
-            padding: 12px; 
-            margin-top: 25px; 
-            background: #667eea; 
+            padding: 14px; 
+            margin-top: 30px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; 
             border: none; 
             border-radius: 8px; 
             cursor: pointer; 
             font-size: 16px; 
             font-weight: bold;
+            letter-spacing: 0.5px;
             transition: all 0.3s ease; 
         }
         button:hover { 
-            background: #5a6cd6; 
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+        }
+        button:active {
+            transform: translateY(1px);
         }
 
         /* Result Box Styling */
@@ -125,9 +164,14 @@ HTML_FORM = """
     </style>
 </head>
 <body>
+
+    <!-- Top Header -->
+    <header class="app-header">
+        💻 Data Science Hub
+    </header>
+
     <div class="container">
-        
-        <!-- JavaScript se control hone wala Dynamic Heading -->
+        <!-- JavaScript se control hone wala Dynamic Heading (Sirf 2 words) -->
         <div class="typewriter-container">
             <span id="typewriter-text"></span><span class="cursor"></span>
         </div>
@@ -169,8 +213,8 @@ HTML_FORM = """
     </div>
 
     <script>
-        // 1. DYNAMIC TYPING EFFECT LOGIC
-        const words = ["AI Prediction System", "Laptop Predictor", "Smart AI Engine"];
+        // 1. DYNAMIC TYPING EFFECT LOGIC (Sirf 2 Words)
+        const words = ["AI Laptop Predictor", "Smart ML Engine"];
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
@@ -187,21 +231,20 @@ HTML_FORM = """
                 charIndex++;
             }
 
-            let typingSpeed = isDeleting ? 50 : 100;
+            let typingSpeed = isDeleting ? 40 : 100;
 
             if (!isDeleting && charIndex === currentWord.length) {
-                typingSpeed = 2000; // Word complete hone ke baad rukne ka time
+                typingSpeed = 2500; // Word complete hone ke baad jyada der ruke
                 isDeleting = true;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length; // Next word select karo
+                wordIndex = (wordIndex + 1) % words.length; // Sirf do words ke bich ghumega
                 typingSpeed = 500;
             }
 
             setTimeout(typeEffect, typingSpeed);
         }
         
-        // Start typing effect jab page load ho
         document.addEventListener("DOMContentLoaded", typeEffect);
 
 
@@ -241,7 +284,7 @@ HTML_FORM = """
                     if(result.prediction_result.toLowerCase() === "yes") {
                         resultBox.className = "success-yes";
                         
-                        // Fire the Confetti Celebration Animation!
+                        // Confetti Celebration
                         confetti({
                             particleCount: 150,
                             spread: 80,
