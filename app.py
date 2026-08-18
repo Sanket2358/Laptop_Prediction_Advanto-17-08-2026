@@ -14,7 +14,7 @@ except Exception as e:
     print(f"Error loading model: {e}")
     model = None
 
-# Premium UI with Header, Animated Background, and 2-Word Typing Effect
+# Premium UI with Animated Background, 2-Word Typing Effect, and Clean Dropdowns
 HTML_FORM = """
 <!DOCTYPE html>
 <html lang="en">
@@ -46,26 +46,6 @@ HTML_FORM = """
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Top Header */
-        .app-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 15px 0;
-            text-align: center;
-            color: white;
-            font-size: 22px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
         /* Container Styling */
         .container { 
             background: #ffffff; 
@@ -75,7 +55,6 @@ HTML_FORM = """
             width: 100%;
             max-width: 360px; 
             animation: fadeIn 1s ease-in-out;
-            margin-top: 80px; /* Header ke liye space */
         }
 
         @keyframes fadeIn {
@@ -165,11 +144,6 @@ HTML_FORM = """
 </head>
 <body>
 
-    <!-- Top Header -->
-    <header class="app-header">
-        💻 Data Science Hub
-    </header>
-
     <div class="container">
         <!-- JavaScript se control hone wala Dynamic Heading (Sirf 2 words) -->
         <div class="typewriter-container">
@@ -182,25 +156,25 @@ HTML_FORM = """
             
             <label>Gender:</label>
             <select id="Gender" required>
-                <option value="0">Female (0)</option>
-                <option value="1" selected>Male (1)</option>
+                <option value="0">Female</option>
+                <option value="1" selected>Male</option>
             </select>
             
             <label>Region:</label>
             <select id="Region" required>
-                <option value="0">Region Type 0</option>
-                <option value="1" selected>Region Type 1</option>
-                <option value="2">Region Type 2</option>
-                <option value="3">Region Type 3</option>
+                <option value="0">North</option>
+                <option value="1" selected>South</option>
+                <option value="2">East</option>
+                <option value="3">West</option>
             </select>
             
             <label>Occupation:</label>
             <select id="Occupation" required>
-                <option value="0">Student (0)</option>
-                <option value="1">Professional (1)</option>
-                <option value="2" selected>Business (2)</option>
-                <option value="3">Freelancer (3)</option>
-                <option value="4">Other (4)</option>
+                <option value="0">Student</option>
+                <option value="1">Professional</option>
+                <option value="2" selected>Business</option>
+                <option value="3">Freelancer</option>
+                <option value="4">Other</option>
             </select>
             
             <label>Income:</label>
@@ -246,7 +220,6 @@ HTML_FORM = """
         }
         
         document.addEventListener("DOMContentLoaded", typeEffect);
-
 
         // 2. FORM SUBMISSION & PREDICTION LOGIC
         document.getElementById("predictionForm").addEventListener("submit", async function(event) {
