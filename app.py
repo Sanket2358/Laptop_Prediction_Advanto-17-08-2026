@@ -170,7 +170,7 @@ HTML_FORM = """
 
     <script>
         // 1. DYNAMIC TYPING EFFECT LOGIC
-        const words = ["AI Prediction", "Laptop Predictor", "Smart AI Engine", "Data Analytics"];
+        const words = ["AI Prediction System", "Laptop Predictor", "Smart AI Engine"];
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
